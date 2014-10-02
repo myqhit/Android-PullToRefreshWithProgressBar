@@ -333,5 +333,9 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		}
 
 	}
-
+	
+	// New code from AgileMD
+	public LoadingLayout getHeaderLoadingView() {
+		return mHeaderLoadingView;
+	}
 }

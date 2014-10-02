@@ -390,4 +390,17 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		}
 	}
 
+	// New code from AgileMD
+	public void setHeaderText(CharSequence text) {
+		if (null != mHeaderText) {
+			mHeaderText.setText(text);
+		}
+	}
+	
+	// New code from AgileMD
+	// Override this in subclass, if relevant
+	public void updateProgress(int progress,
+							   boolean animate) {
+		
+	}
 }

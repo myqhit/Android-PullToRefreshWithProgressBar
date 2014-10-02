@@ -36,6 +36,7 @@ import android.widget.LinearLayout;
 
 import com.handmark.pulltorefresh.library.internal.FlipLoadingLayout;
 import com.handmark.pulltorefresh.library.internal.LoadingLayout;
+import com.handmark.pulltorefresh.library.internal.ProgressBarLoadingLayout;
 import com.handmark.pulltorefresh.library.internal.RotateLoadingLayout;
 import com.handmark.pulltorefresh.library.internal.Utils;
 import com.handmark.pulltorefresh.library.internal.ViewCompat;
@@ -1297,10 +1298,15 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		 * This is the old default, and what is commonly used on iOS. Uses an
 		 * arrow image which flips depending on where the user has scrolled.
 		 */
-		FLIP;
+		FLIP,
+		
+		/**
+		 * New code from AgileMD. This is when you have a progress bar in header.
+		 */
+		PROGRESS_BAR;
 
 		static AnimationStyle getDefault() {
-			return ROTATE;
+			return PROGRESS_BAR;
 		}
 
 		/**
@@ -1314,20 +1320,28 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		static AnimationStyle mapIntToValue(int modeInt) {
 			switch (modeInt) {
 				case 0x0:
-				default:
 					return ROTATE;
 				case 0x1:
 					return FLIP;
+				case 0x10:
+				default:
+					return PROGRESS_BAR;
 			}
 		}
 
 		LoadingLayout createLoadingLayout(Context context, Mode mode, Orientation scrollDirection, TypedArray attrs) {
+			Log.v("TAG", "creating one. this = " + this);
 			switch (this) {
 				case ROTATE:
-				default:
+					Log.v("TAG", "ROTATE");
 					return new RotateLoadingLayout(context, mode, scrollDirection, attrs);
 				case FLIP:
+					Log.v("TAG", "FLIP");
 					return new FlipLoadingLayout(context, mode, scrollDirection, attrs);
+				case PROGRESS_BAR:
+				default:
+					Log.v("TAG", "PROGRESS_BAR");
+					return new ProgressBarLoadingLayout(context, mode, scrollDirection, attrs);
 			}
 		}
 	}
