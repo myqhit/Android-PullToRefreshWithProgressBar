@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">@android:color/white</color>
+    <color name="black">@android:color/black</color>
+    <color name="red">#f78a88</color>
+    <color name="gray">#cccccc</color>
+    <color name="brown">#B97956</color>
+    <color name="green">#1D9E0A</color>
+    <color name="light_gray">#D5DBD5</color>
+    <color name="dark_dark_gray">#222222</color>
+    <color name="dark_gray">#333333</color>
+    <color name="home_bg">#00569C</color>
+    <color name="home_edittext_bg_color">#003C6F</color>
+    <color name="home_edittext_color">#ffffff</color>
+    <color name="disclaimer_bg">#F2F2EA</color>
+    <color name="disclaimer_text">#424242</color>
+    <color name="node_section_bg">#808FA0</color>
+    <color name="app_bg">@android:color/white</color>
+    <color name="header_bg">#313C54</color>
+    <color name="section_header_bg">#8794A9</color>
+    <color name="section_header_text_color">#ffffff</color>
+    <color name="mnm_header_bg">#C30000</color>
+    <color name="agile_dark_blue">#003C6F</color>
+    <color name="agile_light_blue">#00C6FF</color>
+    <color name="home_divider_dark_blue">#02285F</color>
+    <color name="sign_in_button_text_color">#ffffff</color>
+    <color name="sign_in_button_bg">#25A8EB</color>
+    <color name="sign_in_button_pressed_bg">#1883BA</color>
+    <color name="join_agilemd_button_text_color">#ffffff</color>
+    <color name="join_agilemd_button_bg">#133361</color>
+    <color name="join_agilemd_button_pressed_bg">#0D2342</color>
+    <color name="home_edittext_hint_color">#00A9EA</color>
+    <color name="tab_text_color">#444444</color>
+    <color name="task_type_code_bg_color">#76BE7F</color>
+    <color name="list_item_text_color">#333333</color>
+    <color name="list_line_color">#D6D6D6</color>
+    <color name="task_type_code_text_color">#ffffff</color>
+    <color name="node_is_terminal_indicator_color">#E65050</color>
+    <color name="node_is_not_terminal_indicator_color">#3361A7</color>
+    <color name="list_item_row_active_bg_color">#ffffff</color>
+    <color name="list_item_row_inactive_bg_color">#ffffff</color>
+    <color name="list_item_row_pressed_bg_color">#F1F2EC</color>
+    <color name="list_item_row_focused_bg_color">#F1F2EC</color>
+    <color name="list_item_row_disabled_bg_color">#BDBDBD</color>
+    
+    <color name="light_black">#3C3C3C</color>
+    <color name="dark_black">#1F2020</color>
+    <color name="menu_text_color">#ffffff</color>
+    
+    <color name="submit_feedback_type_color">#00559B</color>
+    <color name="submit_feedback_title_color">#ffffff</color>
+
+    <color name="unsynced_color">#65000000</color>
+    
+    <color name="c1_0">#FFC21F</color>
+    <color name="c1_1">#FE8D00</color>
+    <color name="c1_2">#FFFFCD</color>
+    <color name="c1_3">#FFDC5E</color>
+    <color name="c2_0">#8AD800</color>
+    <color name="c2_1">#58A700</color>
+    <color name="c2_3">#6CBA09</color>
+    <color name="c2_4">#D1E7B5</color>
+    <color name="c3_0">#00BEEC</color>
+    <color name="c3_1">#06A2D6</color>
+    <color name="c4_0">#BDBDBD</color>
+    <color name="c4_1">#808080</color>
+    <color name="c4_2">#6B6B6B</color>
+    <color name="c4_3">#404040</color>
+    <color name="c4_4">#F2F2F2</color>
+    <color name="c4_5">#D4D3D5</color>
+    <color name="c4_6">#EBEBEB</color>
+    <color name="c5_0">#FFFFFF</color>
+</resources>

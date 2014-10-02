@@ -47,7 +47,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 
 	static final Interpolator ANIMATION_INTERPOLATOR = new LinearInterpolator();
 
-	private FrameLayout mInnerLayout;
+	protected FrameLayout mInnerLayout;
 
 	protected final ImageView mHeaderImage;
 	protected final ProgressBar mHeaderProgress;
@@ -64,19 +64,24 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 	private CharSequence mRefreshingLabel;
 	private CharSequence mReleaseLabel;
 
-	public LoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs) {
+	public LoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs, boolean useProgressLayout) {
 		super(context);
 		mMode = mode;
 		mScrollDirection = scrollDirection;
 
-		switch (scrollDirection) {
-			case HORIZONTAL:
-				LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_header_horizontal, this);
-				break;
-			case VERTICAL:
-			default:
-				LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_header_vertical, this);
-				break;
+		if (useProgressLayout) {
+			// New code from AgileMD
+			LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_progress_header, this);
+		} else {
+			switch (scrollDirection) {
+				case HORIZONTAL:
+					LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_header_horizontal, this);
+					break;
+				case VERTICAL:
+				default:
+					LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_header_vertical, this);
+					break;
+			}
 		}
 
 		mInnerLayout = (FrameLayout) findViewById(R.id.fl_inner);
@@ -206,24 +211,27 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		if (View.VISIBLE == mHeaderText.getVisibility()) {
 			mHeaderText.setVisibility(View.INVISIBLE);
 		}
-		if (View.VISIBLE == mHeaderProgress.getVisibility()) {
+		if (null != mHeaderProgress &&
+			View.VISIBLE == mHeaderProgress.getVisibility()) {
 			mHeaderProgress.setVisibility(View.INVISIBLE);
 		}
-		if (View.VISIBLE == mHeaderImage.getVisibility()) {
+		if (null != mHeaderImage &&
+			View.VISIBLE == mHeaderImage.getVisibility()) {
 			mHeaderImage.setVisibility(View.INVISIBLE);
 		}
-		if (View.VISIBLE == mSubHeaderText.getVisibility()) {
+		if (null != mSubHeaderText &&
+			View.VISIBLE == mSubHeaderText.getVisibility()) {
 			mSubHeaderText.setVisibility(View.INVISIBLE);
 		}
 	}
 
-	public final void onPull(float scaleOfLayout) {
+	public void onPull(float scaleOfLayout) {
 		if (!mUseIntrinsicAnimation) {
 			onPullImpl(scaleOfLayout);
 		}
 	}
 
-	public final void pullToRefresh() {
+	public void pullToRefresh() {
 		if (null != mHeaderText) {
 			mHeaderText.setText(mPullLabel);
 		}
@@ -232,7 +240,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		pullToRefreshImpl();
 	}
 
-	public final void refreshing() {
+	public void refreshing() {
 		if (null != mHeaderText) {
 			mHeaderText.setText(mRefreshingLabel);
 		}
@@ -249,7 +257,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		}
 	}
 
-	public final void releaseToRefresh() {
+	public void releaseToRefresh() {
 		if (null != mHeaderText) {
 			mHeaderText.setText(mReleaseLabel);
 		}
@@ -258,7 +266,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		releaseToRefreshImpl();
 	}
 
-	public final void reset() {
+	public void reset() {
 		if (null != mHeaderText) {
 			mHeaderText.setText(mPullLabel);
 		}
@@ -285,7 +293,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		setSubHeaderText(label);
 	}
 
-	public final void setLoadingDrawable(Drawable imageDrawable) {
+	public void setLoadingDrawable(Drawable imageDrawable) {
 		// Set Drawable
 		mHeaderImage.setImageDrawable(imageDrawable);
 		mUseIntrinsicAnimation = (imageDrawable instanceof AnimationDrawable);
@@ -315,13 +323,16 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		if (View.INVISIBLE == mHeaderText.getVisibility()) {
 			mHeaderText.setVisibility(View.VISIBLE);
 		}
-		if (View.INVISIBLE == mHeaderProgress.getVisibility()) {
+		if (null != mHeaderProgress &&
+			View.INVISIBLE == mHeaderProgress.getVisibility()) {
 			mHeaderProgress.setVisibility(View.VISIBLE);
 		}
-		if (View.INVISIBLE == mHeaderImage.getVisibility()) {
+		if (null != mHeaderImage &&
+			View.INVISIBLE == mHeaderImage.getVisibility()) {
 			mHeaderImage.setVisibility(View.VISIBLE);
 		}
-		if (View.INVISIBLE == mSubHeaderText.getVisibility()) {
+		if (null != mSubHeaderText &&
+			View.INVISIBLE == mSubHeaderText.getVisibility()) {
 			mSubHeaderText.setVisibility(View.VISIBLE);
 		}
 	}
