@@ -477,12 +477,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	}
 
 	@Override
-	public final void setRefreshing() {
+	public void setRefreshing() {
 		setRefreshing(true);
 	}
 
 	@Override
-	public final void setRefreshing(boolean doScroll) {
+	public void setRefreshing(boolean doScroll) {
 		if (!isRefreshing()) {
 			setState(State.MANUAL_REFRESHING, doScroll);
 		}
