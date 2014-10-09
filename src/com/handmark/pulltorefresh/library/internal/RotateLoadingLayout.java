@@ -39,7 +39,7 @@ public class RotateLoadingLayout extends LoadingLayout {
 	private final boolean mRotateDrawableWhilePulling;
 
 	public RotateLoadingLayout(Context context, Mode mode, Orientation scrollDirection, TypedArray attrs) {
-		super(context, mode, scrollDirection, attrs, false);
+		super(context, mode, scrollDirection, attrs);
 
 		mRotateDrawableWhilePulling = attrs.getBoolean(R.styleable.PullToRefresh_ptrRotateDrawableWhilePulling, true);
 

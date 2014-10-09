@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.view.LayoutInflater;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 
@@ -15,13 +16,13 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Orientation;
 import com.handmark.pulltorefresh.library.R;
 
-public class ProgressBarLoadingLayout extends LoadingLayout {
+public class CustomLoadingLayout extends LoadingLayout {
 
 	private final ProgressBar progressBar;
 
 	@SuppressWarnings("rawtypes")
-	public ProgressBarLoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs) {
-		super(context, mode, scrollDirection, attrs, true);
+	public CustomLoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs) {
+		super(context, mode, scrollDirection, attrs);
 		progressBar = (ProgressBar)mInnerLayout.findViewById(R.id.progress);
 	}
 

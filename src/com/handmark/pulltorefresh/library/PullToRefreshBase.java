@@ -36,7 +36,7 @@ import android.widget.LinearLayout;
 
 import com.handmark.pulltorefresh.library.internal.FlipLoadingLayout;
 import com.handmark.pulltorefresh.library.internal.LoadingLayout;
-import com.handmark.pulltorefresh.library.internal.ProgressBarLoadingLayout;
+import com.handmark.pulltorefresh.library.internal.CustomLoadingLayout;
 import com.handmark.pulltorefresh.library.internal.RotateLoadingLayout;
 import com.handmark.pulltorefresh.library.internal.Utils;
 import com.handmark.pulltorefresh.library.internal.ViewCompat;
@@ -1303,10 +1303,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		/**
 		 * New code from AgileMD. This is when you have a progress bar in header.
 		 */
-		PROGRESS_BAR;
+		CUSTOM;
 
 		static AnimationStyle getDefault() {
-			return PROGRESS_BAR;
+			return CUSTOM;
 		}
 
 		/**
@@ -1325,7 +1325,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 					return FLIP;
 				case 0x10:
 				default:
-					return PROGRESS_BAR;
+					return CUSTOM;
 			}
 		}
 
@@ -1338,10 +1338,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 				case FLIP:
 					Log.v("TAG", "FLIP");
 					return new FlipLoadingLayout(context, mode, scrollDirection, attrs);
-				case PROGRESS_BAR:
+				case CUSTOM:
 				default:
-					Log.v("TAG", "PROGRESS_BAR");
-					return new ProgressBarLoadingLayout(context, mode, scrollDirection, attrs);
+					Log.v("TAG", "CUSTOM");
+					return new CustomLoadingLayout(context, mode, scrollDirection, attrs);
 			}
 		}
 	}

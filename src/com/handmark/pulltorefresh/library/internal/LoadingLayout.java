@@ -23,6 +23,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -64,15 +65,19 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 	private CharSequence mRefreshingLabel;
 	private CharSequence mReleaseLabel;
 
-	public LoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs, boolean useProgressLayout) {
+	public LoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs) {
 		super(context);
 		mMode = mode;
 		mScrollDirection = scrollDirection;
 
-		if (useProgressLayout) {
-			// New code from AgileMD
-			LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_progress_header, this);
+		Log.v("TAG", "HERE WE GO");
+		if (attrs.hasValue(R.styleable.PullToRefresh_ptrCustomLoadingLayout)) {
+			Log.v("TAG", "HEY WE HAVE IT");
+			int layoutID = attrs.getResourceId(R.styleable.PullToRefresh_ptrCustomLoadingLayout, 0);
+			Log.v("TAG", "and id = " + layoutID);
+			LayoutInflater.from(context).inflate(layoutID, this);
 		} else {
+			Log.v("TAG", "DONT HAVET IT");
 			switch (scrollDirection) {
 				case HORIZONTAL:
 					LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_header_horizontal, this);
