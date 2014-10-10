@@ -476,7 +476,7 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 	
 	@Override
 	protected int getInitialYOffsetHeader() {
-//		Log.v(LOG_TAG, "getInitialYOffsetHeader");
+		Log.v(LOG_TAG, "getInitialYOffsetHeader");
 		final Adapter adapter = mRefreshableView.getAdapter();
 		// If currently refreshing (header should be visible),
 		// and we have an empty view (so there is that second header
@@ -490,11 +490,11 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 					return getFooterSize();
 				default:
 				case PULL_FROM_START:
-//					Log.v(LOG_TAG, "GET NEGATIVE HEADER");
+					Log.v(LOG_TAG, "GET NEGATIVE HEADER");
 					return -getHeaderSize();
 			}
 		} else {
-//			Log.v(LOG_TAG, "just parent");
+			Log.v(LOG_TAG, "just parent");
 			return super.getInitialYOffsetHeader();
 		}
 	}

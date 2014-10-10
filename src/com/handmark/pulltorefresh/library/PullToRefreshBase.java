@@ -1339,17 +1339,16 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		}
 
 		LoadingLayout createLoadingLayout(Context context, Mode mode, Orientation scrollDirection, TypedArray attrs) {
-			Log.v("TAG", "creating one. this = " + this);
 			switch (this) {
 				case ROTATE:
-					Log.v("TAG", "ROTATE");
+//					Log.v("TAG", "ROTATE");
 					return new RotateLoadingLayout(context, mode, scrollDirection, attrs);
 				case FLIP:
-					Log.v("TAG", "FLIP");
+//					Log.v("TAG", "FLIP");
 					return new FlipLoadingLayout(context, mode, scrollDirection, attrs);
 				case CUSTOM:
 				default:
-					Log.v("TAG", "CUSTOM");
+//					Log.v("TAG", "CUSTOM");
 					return new CustomLoadingLayout(context, mode, scrollDirection, attrs);
 			}
 		}

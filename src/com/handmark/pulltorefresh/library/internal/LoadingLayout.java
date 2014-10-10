@@ -70,14 +70,10 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		mMode = mode;
 		mScrollDirection = scrollDirection;
 
-		Log.v("TAG", "HERE WE GO");
 		if (attrs.hasValue(R.styleable.PullToRefresh_ptrCustomLoadingLayout)) {
-			Log.v("TAG", "HEY WE HAVE IT");
 			int layoutID = attrs.getResourceId(R.styleable.PullToRefresh_ptrCustomLoadingLayout, 0);
-			Log.v("TAG", "and id = " + layoutID);
 			LayoutInflater.from(context).inflate(layoutID, this);
 		} else {
-			Log.v("TAG", "DONT HAVET IT");
 			switch (scrollDirection) {
 				case HORIZONTAL:
 					LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_header_horizontal, this);
