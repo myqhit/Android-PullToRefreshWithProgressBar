@@ -73,15 +73,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	private int mTouchSlop;
 	private float mLastMotionX, mLastMotionY;
 	private float mInitialMotionX, mInitialMotionY;
-	
-	// New code from AgileMD
-	protected int initialYOffsetHeader = 0;
 
 	private boolean mIsBeingDragged = false;
 	private State mState = State.RESET;
 	private Mode mMode = Mode.getDefault();
 
-	private Mode mCurrentMode;
+	protected Mode mCurrentMode;
 	T mRefreshableView;
 	private FrameLayout mRefreshableViewWrapper;
 
@@ -359,7 +356,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
 					// If we're already refreshing, just scroll back to the top
 					if (isRefreshing()) {
-						smoothScrollTo(0);
+						smoothScrollTo(getInitialYOffsetHeader());
 						return true;
 					}
 
@@ -1202,12 +1199,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 				itemDimension = getHeaderSize();
 				break;
 		}
-
-		//TODO if empty list
-		if (mState == State.REFRESHING) {
-			initialYOffsetHeader = -itemDimension;
-		}
-		setHeaderScroll(newScrollValue, initialYOffsetHeader);
+		
+		setHeaderScroll(newScrollValue, getInitialYOffsetHeader());
 
 		if (newScrollValue != 0 && !isRefreshing()) {
 			float scale = Math.abs(newScrollValue) / (float) itemDimension;
@@ -1678,6 +1671,19 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
 	static interface OnSmoothScrollFinishedListener {
 		void onSmoothScrollFinished();
+	}
+	
+	// New code from AgileMD
+	// Any subclass which wishes for, in some cases, the header to be scrolled
+	// initially to something other than 0 would override this.
+	// For example, AdapterViewBase knows that in case of empty view, we want
+	// it to scroll to header view size so it would override this and check if
+	// empty and return that value.
+	// The original code implicitly assumed we always want to go to a value based
+	// of zero (e.g. "difference in y initial and y motion plus ZERO" instead of
+	// that plus your desired offset.
+	protected int getInitialYOffsetHeader() {
+		return 0;
 	}
 
 }
