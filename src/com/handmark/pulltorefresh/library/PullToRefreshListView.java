@@ -22,6 +22,7 @@ import android.graphics.Canvas;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -337,5 +338,35 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 	// New code from AgileMD
 	public LoadingLayout getHeaderLoadingView() {
 		return mHeaderLoadingView;
+	}
+	
+	// If mHeaderLayout (the fake header view on top of your true refreshable view)
+	// is visible, and mHeaderLoadingView (the true header view of your ListView)
+	// is currently not visible, we want to scroll up such that mHeaderLayout
+	// will still be visible and not disappear off the top.
+	// In the original library this would happen in this case:
+	// - an empty ListView is refreshing and you try to drag down again
+	// (Basically, we want to show SOMETHING. We prefer to show the ListView's true
+	//  header view (mHeaderLoadingView), but if that one is not visible, we want to
+	//  make sure we can fall back to showing mHeaderLayout (the fake one) by saying
+	//  "hey don't scroll up all the way in this particular case).
+	@Override
+	protected int getInitialYOffsetHeader() {
+		if (DEBUG) Log.v(LOG_TAG, "getInitialYOffsetHeader");
+		if (isRefreshing() &&
+			mHeaderLayout.getVisibility() == View.VISIBLE &&
+			mHeaderLoadingView.getVisibility() != View.VISIBLE) {
+			switch (mCurrentMode) {
+				case MANUAL_REFRESH_ONLY:
+				case PULL_FROM_END:
+					return getFooterSize();
+				default:
+				case PULL_FROM_START:
+					if (DEBUG) Log.v(LOG_TAG, "GET NEGATIVE HEADER");
+					return -getHeaderSize();
+			}
+		} else {
+			return super.getInitialYOffsetHeader();
+		}
 	}
 }

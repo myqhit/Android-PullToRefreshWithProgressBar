@@ -208,7 +208,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		}
 	}
 
-	public final void hideAllViews() {
+	public void hideAllViews() {
 		if (View.VISIBLE == mHeaderText.getVisibility()) {
 			mHeaderText.setVisibility(View.INVISIBLE);
 		}
@@ -320,7 +320,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		mHeaderText.setTypeface(tf);
 	}
 
-	public final void showInvisibleViews() {
+	public void showInvisibleViews() {
 		if (View.INVISIBLE == mHeaderText.getVisibility()) {
 			mHeaderText.setVisibility(View.VISIBLE);
 		}

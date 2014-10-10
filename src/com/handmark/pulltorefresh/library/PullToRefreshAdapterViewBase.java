@@ -473,29 +473,4 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 			}
 		}
 	}
-	
-	@Override
-	protected int getInitialYOffsetHeader() {
-		if (DEBUG) Log.v(LOG_TAG, "getInitialYOffsetHeader");
-		final Adapter adapter = mRefreshableView.getAdapter();
-		// If currently refreshing (header should be visible),
-		// and we have an empty view (so there is that second header
-		// above our refreshable list), then we actually want
-		// to have the initial y offset be header size not 0.
-		if (isRefreshing() &&
-			(null == adapter || adapter.isEmpty()) ){
-			switch (mCurrentMode) {
-				case MANUAL_REFRESH_ONLY:
-				case PULL_FROM_END:
-					return getFooterSize();
-				default:
-				case PULL_FROM_START:
-					if (DEBUG) Log.v(LOG_TAG, "GET NEGATIVE HEADER");
-					return -getHeaderSize();
-			}
-		} else {
-			Log.v(LOG_TAG, "just parent");
-			return super.getInitialYOffsetHeader();
-		}
-	}
 }

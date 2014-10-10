@@ -8,7 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
+import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 
@@ -94,6 +94,22 @@ public class CustomLoadingLayout extends LoadingLayout {
 
 	@Override
 	protected void resetImpl() {
+	}
+	
+	@Override
+	public void hideAllViews() {
+		super.hideAllViews();
+		if (View.VISIBLE == progressBar.getVisibility()) {
+			progressBar.setVisibility(View.INVISIBLE);
+		}
+	}
+	
+	@Override
+	public void showInvisibleViews() {
+		super.showInvisibleViews();
+		if (View.INVISIBLE == progressBar.getVisibility()) {
+			progressBar.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
