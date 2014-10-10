@@ -490,7 +490,7 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 					return getFooterSize();
 				default:
 				case PULL_FROM_START:
-					Log.v(LOG_TAG, "GET NEGATIVE HEADER");
+//					Log.v(LOG_TAG, "GET NEGATIVE HEADER");
 					return -getHeaderSize();
 			}
 		} else {
