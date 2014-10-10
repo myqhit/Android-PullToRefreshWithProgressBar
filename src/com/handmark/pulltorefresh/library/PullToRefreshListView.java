@@ -115,7 +115,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
 			// We scroll slightly so that the ListView's header/footer is at the
 			// same Y position as our normal header/footer
-			setHeaderScroll(scrollToY);
+			setHeaderScroll(scrollToY, 0);
 
 			// Make sure the ListView is scrolled to show the loading
 			// header/footer
@@ -176,7 +176,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 			 */
 			if (scrollLvToEdge && getState() != State.MANUAL_REFRESHING) {
 				mRefreshableView.setSelection(selection);
-				setHeaderScroll(scrollToHeight);
+				setHeaderScroll(scrollToHeight, 0);
 			}
 		}
 

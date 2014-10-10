@@ -73,6 +73,9 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	private int mTouchSlop;
 	private float mLastMotionX, mLastMotionY;
 	private float mInitialMotionX, mInitialMotionY;
+	
+	// New code from AgileMD
+	protected int initialYOffsetHeader = 0;
 
 	private boolean mIsBeingDragged = false;
 	private State mState = State.RESET;
@@ -946,7 +949,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * 
 	 * @param value - New Scroll value
 	 */
-	protected final void setHeaderScroll(int value) {
+	protected final void setHeaderScroll(int value,
+										 int initialOffset) {
 		if (DEBUG) {
 			Log.d(LOG_TAG, "setHeaderScroll: " + value);
 		}
@@ -976,6 +980,14 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 					: View.LAYER_TYPE_NONE);
 		}
 
+		//TODO
+		//if empty list and mState != State.PULL_TO_REFRESH
+//		if (mState != State.PULL_TO_REFRESH) {
+//			value += -getHeaderSize();
+//		}
+		
+		value += initialOffset;
+		
 		switch (getPullToRefreshScrollDirection()) {
 			case VERTICAL:
 				scrollTo(0, value);
@@ -1191,7 +1203,11 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 				break;
 		}
 
-		setHeaderScroll(newScrollValue);
+		//TODO if empty list
+		if (mState == State.REFRESHING) {
+			initialYOffsetHeader = -itemDimension;
+		}
+		setHeaderScroll(newScrollValue, initialYOffsetHeader);
 
 		if (newScrollValue != 0 && !isRefreshing()) {
 			float scale = Math.abs(newScrollValue) / (float) itemDimension;
@@ -1641,7 +1657,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 				final int deltaY = Math.round((mScrollFromY - mScrollToY)
 						* mInterpolator.getInterpolation(normalizedTime / 1000f));
 				mCurrentY = mScrollFromY - deltaY;
-				setHeaderScroll(mCurrentY);
+				setHeaderScroll(mCurrentY, 0);
 			}
 
 			// If we're not at the target Y, keep going...
