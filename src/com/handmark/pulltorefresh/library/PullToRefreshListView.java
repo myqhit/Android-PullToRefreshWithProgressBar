@@ -18,6 +18,7 @@ package com.handmark.pulltorefresh.library;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.database.DataSetObserver;
 import android.graphics.Canvas;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -314,12 +316,15 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
 		@Override
 		public void setAdapter(ListAdapter adapter) {
+			Log.v("TAG", "SET MAH ADAPTER!");
 			// Add the Footer View at the last possible moment
 			if (null != mLvFooterLoadingFrame && !mAddedLvFooter) {
 				addFooterView(mLvFooterLoadingFrame, null, false);
 				mAddedLvFooter = true;
 			}
 
+			setDataSetObservor(adapter);
+			
 			super.setAdapter(adapter);
 		}
 
@@ -333,6 +338,129 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 			super.setEmptyView(emptyView);
 		}
 
+	}
+	
+	// New code from AgileMD:
+	// We need to toggle the "fake" header view (getHeaderLayout())
+	// and the true ListView header view (mHeaderLoadingView) visibility
+	// and scroll if suddenly our adapter becomes empty or non-empty.
+	private void setDataSetObservor(ListAdapter adapter) {
+		if (DEBUG) Log.v(LOG_TAG, "setDataSetObservor");
+		if (myDataSetObservor == null) {
+			myDataSetObservor = new MyDataSetObserver();
+		}
+
+		
+		if (!adapter.equals(myDataSetObservor.getAdapter())) {
+			if (DEBUG) Log.v(LOG_TAG, "WHAT");
+			if (myDataSetObservor.getAdapter() != null) {
+				myDataSetObservor.getAdapter().unregisterDataSetObserver(myDataSetObservor);
+			}
+			adapter.registerDataSetObserver(myDataSetObservor);
+			myDataSetObservor.setAdapter(adapter);
+		}
+	}
+	
+	private MyDataSetObserver myDataSetObservor = null;
+	private class MyDataSetObserver extends DataSetObserver {
+		
+		private boolean wasEmpty = true;
+		private ListAdapter adapter = null;
+	
+		public ListAdapter getAdapter() {
+			return adapter;
+		}
+
+		public void setAdapter(ListAdapter adapter) {
+			this.adapter = adapter;
+		}
+
+		
+		@Override
+		public void onChanged() {
+			if (DEBUG) Log.v(LOG_TAG, "onChanged wasEmpty = " + wasEmpty + ", adapter.isEmpty() = " + adapter.isEmpty());
+			if (adapter.isEmpty() != wasEmpty) {
+				switch (mState) {
+					case RESET:
+						if (DEBUG) Log.v(LOG_TAG, "RESET");
+						onReset();
+						break;
+					case REFRESHING:
+					case MANUAL_REFRESHING:
+						if (DEBUG) Log.v(LOG_TAG, "REFRESHING");
+						toggleLoadingLayoutsForEmptyChange(adapter.isEmpty());
+						break;
+				}
+				wasEmpty = adapter.isEmpty();
+			}
+		}
+		
+		private void toggleLoadingLayoutsForEmptyChange(boolean isEmpty) {
+			if (DEBUG) Log.v(LOG_TAG, "toggleLoadingLayoutsForEmptyChange isEmpty = " + isEmpty);
+			final LoadingLayout origLoadingView, listViewLoadingView, oppositeListViewLoadingView;
+			final int selection, scrollToY;
+			final int origLoadingViewVisibility;
+
+			switch (getCurrentMode()) {
+				case MANUAL_REFRESH_ONLY:
+				case PULL_FROM_END: {
+					if (DEBUG) Log.v(LOG_TAG, "PULL_FROM_END");
+					origLoadingView = getFooterLayout();
+					origLoadingViewVisibility = View.INVISIBLE;
+					listViewLoadingView = mFooterLoadingView;
+					oppositeListViewLoadingView = mHeaderLoadingView;
+					selection = mRefreshableView.getCount() - 1;
+					scrollToY = getScrollY() - getFooterSize();
+					break;
+				}
+				case PULL_FROM_START:
+				default: {
+					if (isEmpty) {
+						if (DEBUG) Log.v(LOG_TAG, "isEmpty!");
+						origLoadingView = mHeaderLoadingView;
+						origLoadingViewVisibility = View.GONE;
+						listViewLoadingView = getHeaderLayout();
+						oppositeListViewLoadingView = mFooterLoadingView;
+						selection = 0;
+						scrollToY = -getHeaderSize();
+					} else {
+						if (DEBUG) Log.v(LOG_TAG, "not isEmpty!");
+						origLoadingView = getHeaderLayout();
+						origLoadingViewVisibility = View.INVISIBLE;
+						listViewLoadingView = mHeaderLoadingView;
+						oppositeListViewLoadingView = mFooterLoadingView;
+						selection = 0;
+						scrollToY = getScrollY() + getHeaderSize();
+					}
+					break;
+				}
+			}
+			
+			// Hide our original Loading View
+			origLoadingView.setVisibility(origLoadingViewVisibility);
+			origLoadingView.reset();
+			origLoadingView.hideAllViews();
+
+			// Make sure the opposite end is hidden too
+			oppositeListViewLoadingView.setVisibility(View.GONE);
+
+			// Show the ListView Loading View and set it to refresh.
+			listViewLoadingView.setVisibility(View.VISIBLE);
+			listViewLoadingView.refreshing();
+			listViewLoadingView.showInvisibleViews();
+
+			// We need to disable the automatic visibility changes for now
+			disableLoadingLayoutVisibilityChanges();
+
+			// We scroll slightly so that the ListView's header/footer is at the
+			// same Y position as our normal header/footer
+			setHeaderScroll(scrollToY, 0);
+			if (DEBUG) Log.v(LOG_TAG, "scrollToY = " + scrollToY);
+
+			// Make sure the ListView is scrolled to show the loading
+			// header/footer
+			mRefreshableView.setSelection(selection);
+		}
 	}
 	
 	// New code from AgileMD

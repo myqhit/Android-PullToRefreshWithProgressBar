@@ -75,7 +75,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	private float mInitialMotionX, mInitialMotionY;
 
 	private boolean mIsBeingDragged = false;
-	private State mState = State.RESET;
+	protected State mState = State.RESET;
 	private Mode mMode = Mode.getDefault();
 
 	protected Mode mCurrentMode;
