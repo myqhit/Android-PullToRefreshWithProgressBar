@@ -19,11 +19,13 @@ import com.handmark.pulltorefresh.library.R;
 public class CustomLoadingLayout extends LoadingLayout {
 
 	private final ProgressBar progressBar;
+	private final View messageBanner;
 
 	@SuppressWarnings("rawtypes")
 	public CustomLoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs) {
 		super(context, mode, scrollDirection, attrs);
 		progressBar = (ProgressBar)mInnerLayout.findViewById(R.id.progress);
+		messageBanner = mInnerLayout.findViewById(R.id.message_banner);
 	}
 
 	// Override any header text changing because I handle that differently.
@@ -101,6 +103,7 @@ public class CustomLoadingLayout extends LoadingLayout {
 		super.hideAllViews();
 		if (View.VISIBLE == progressBar.getVisibility()) {
 			progressBar.setVisibility(View.INVISIBLE);
+            messageBanner.setVisibility(View.INVISIBLE);
 		}
 	}
 	
@@ -109,6 +112,7 @@ public class CustomLoadingLayout extends LoadingLayout {
 		super.showInvisibleViews();
 		if (View.INVISIBLE == progressBar.getVisibility()) {
 			progressBar.setVisibility(View.VISIBLE);
+            messageBanner.setVisibility(View.VISIBLE);
 		}
 	}
 
