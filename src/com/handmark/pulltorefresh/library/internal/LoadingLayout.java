@@ -55,7 +55,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 
 	private boolean mUseIntrinsicAnimation;
 
-	private final TextView mHeaderText;
+	protected final TextView mHeaderText;
 	private final TextView mSubHeaderText;
 
 	protected final Mode mMode;
@@ -65,14 +65,13 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 	private CharSequence mRefreshingLabel;
 	private CharSequence mReleaseLabel;
 
-	public LoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs) {
+	public LoadingLayout(Context context, final Mode mode, final Orientation scrollDirection, TypedArray attrs, Integer customLoadingLayoutResId) {
 		super(context);
 		mMode = mode;
 		mScrollDirection = scrollDirection;
 
-		if (attrs.hasValue(R.styleable.PullToRefresh_ptrCustomLoadingLayout)) {
-			int layoutID = attrs.getResourceId(R.styleable.PullToRefresh_ptrCustomLoadingLayout, 0);
-			LayoutInflater.from(context).inflate(layoutID, this);
+		if (customLoadingLayoutResId != null) {
+			LayoutInflater.from(context).inflate(customLoadingLayoutResId, this);
 		} else {
 			switch (scrollDirection) {
 				case HORIZONTAL:
@@ -400,19 +399,5 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		if (null != mSubHeaderText) {
 			mSubHeaderText.setTextColor(color);
 		}
-	}
-
-	// New code from AgileMD
-	public void setHeaderText(CharSequence text) {
-		if (null != mHeaderText) {
-			mHeaderText.setText(text);
-		}
-	}
-	
-	// New code from AgileMD
-	// Override this in subclass, if relevant
-	public void updateProgress(int progress,
-							   boolean animate) {
-		
 	}
 }

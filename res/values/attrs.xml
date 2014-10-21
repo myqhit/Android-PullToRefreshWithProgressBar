@@ -70,8 +70,6 @@
         	takes effect when using the 'Rotate' Animation Style.
         -->
         <attr name="ptrRotateDrawableWhilePulling" format="reference|boolean" />
-
-        <attr name="ptrCustomLoadingLayout" format="reference" />
         
         <!-- BELOW HERE ARE DEPRECEATED. DO NOT USE. -->
         <attr name="ptrAdapterViewBackground" format="reference|color" />
