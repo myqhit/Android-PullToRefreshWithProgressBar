@@ -316,7 +316,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
 		@Override
 		public void setAdapter(ListAdapter adapter) {
-			Log.v("TAG", "SET MAH ADAPTER!");
+			//Log.v("TAG", "SET MAH ADAPTER!");
 			// Add the Footer View at the last possible moment
 			if (null != mLvFooterLoadingFrame && !mAddedLvFooter) {
 				addFooterView(mLvFooterLoadingFrame, null, false);
