@@ -349,7 +349,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
 					if (mState == State.RELEASE_TO_REFRESH
 							&& (null != mOnRefreshListener || null != mOnRefreshListener2)) {
-						setState(State.REFRESHING, true);
+						setState(State.REFRESHING, true, true);
 						return true;
 					}
 
@@ -477,13 +477,14 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
 	@Override
 	public void setRefreshing() {
-		setRefreshing(true);
+		setRefreshing(true, true);
 	}
 
 	@Override
-	public void setRefreshing(boolean doScroll) {
+	public void setRefreshing(boolean doScroll,
+                              boolean smoothScroll) {
 		if (!isRefreshing()) {
-			setState(State.MANUAL_REFRESHING, doScroll);
+			setState(State.MANUAL_REFRESHING, doScroll, smoothScroll);
 		}
 	}
 
@@ -554,7 +555,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 				break;
 			case REFRESHING:
 			case MANUAL_REFRESHING:
-				onRefreshing(params[0]);
+				onRefreshing(params[0],
+                             params[1]);
 				break;
 			case OVERSCROLLING:
 				// NO-OP
@@ -724,7 +726,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * 
 	 * @param doScroll - Whether the UI should scroll for this event.
 	 */
-	protected void onRefreshing(final boolean doScroll) {
+	protected void onRefreshing(final boolean doScroll,
+                                final boolean smoothScroll) {
 		if (mMode.showHeaderLoadingLayout()) {
 			mHeaderLayout.refreshing();
 		}
@@ -746,16 +749,30 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 				switch (mCurrentMode) {
 					case MANUAL_REFRESH_ONLY:
 					case PULL_FROM_END:
-						smoothScrollTo(getFooterSize(), listener);
-						break;
+                        if (smoothScroll) {
+                            smoothScrollTo(getFooterSize(), listener);
+                        } else {
+                            setHeaderScroll(getFooterSize(), 0);
+                            callRefreshListener();
+                        }
+                        break;
 					default:
 					case PULL_FROM_START:
-						smoothScrollTo(-getHeaderSize(), listener);
-						break;
+                        if (smoothScroll) {
+                            smoothScrollTo(-getHeaderSize(), listener);
+                        } else {
+                            setHeaderScroll(-getHeaderSize(), 0);
+                            callRefreshListener();
+                        }
+                        break;
 				}
 			} else {
-				smoothScrollTo(0);
-			}
+                if (smoothScroll) {
+                    smoothScrollTo(0);
+                } else {
+                    setHeaderScroll(0, 0);
+                }
+            }
 		} else {
 			// We're not scrolling, so just call Refresh Listener now
 			callRefreshListener();
@@ -811,7 +828,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
 			State viewState = State.mapIntToValue(bundle.getInt(STATE_STATE, 0));
 			if (viewState == State.REFRESHING || viewState == State.MANUAL_REFRESHING) {
-				setState(viewState, true);
+				setState(viewState, true, true);
 			}
 
 			// Now let derivative classes restore their state

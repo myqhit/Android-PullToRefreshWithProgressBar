@@ -65,18 +65,21 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 	}
 
 	@Override
-	protected void onRefreshing(final boolean doScroll) {
+	protected void onRefreshing(final boolean doScroll,
+                                final boolean smoothScroll) {
 		/**
 		 * If we're not showing the Refreshing view, or the list is empty, the
 		 * the header/footer views won't show so we use the normal method.
 		 */
 		ListAdapter adapter = mRefreshableView.getAdapter();
 		if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing() || null == adapter || adapter.isEmpty()) {
-			super.onRefreshing(doScroll);
+			super.onRefreshing(doScroll,
+                               smoothScroll);
 			return;
 		}
 
-		super.onRefreshing(false);
+		super.onRefreshing(false,
+                           false);
 
 		final LoadingLayout origLoadingView, listViewLoadingView, oppositeListViewLoadingView;
 		final int selection, scrollToY;

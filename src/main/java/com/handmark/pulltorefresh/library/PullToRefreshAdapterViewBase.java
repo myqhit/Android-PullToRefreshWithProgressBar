@@ -262,8 +262,10 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 		}
 	}
 
-	protected void onRefreshing(boolean doScroll) {
-		super.onRefreshing(doScroll);
+	protected void onRefreshing(boolean doScroll,
+                                boolean smoothScroll) {
+		super.onRefreshing(doScroll,
+                           smoothScroll);
 
 		if (getShowIndicatorInternal()) {
 			updateIndicatorViewsVisibility();

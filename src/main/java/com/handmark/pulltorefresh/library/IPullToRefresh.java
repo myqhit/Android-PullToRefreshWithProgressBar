@@ -216,7 +216,8 @@ public interface IPullToRefresh<T extends View> {
 	 * @param doScroll - true if you want to force a scroll to the Refreshing
 	 *            view.
 	 */
-	public void setRefreshing(boolean doScroll);
+	public void setRefreshing(boolean doScroll,
+                              boolean smoothScroll);
 
 	/**
 	 * Sets the Animation Interpolator that is used for animated scrolling.
