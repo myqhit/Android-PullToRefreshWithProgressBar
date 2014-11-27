@@ -812,50 +812,51 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		smoothScrollTo(0);
 	}
 
-	@Override
-	protected final void onRestoreInstanceState(Parcelable state) {
-		if (state instanceof Bundle) {
-			Bundle bundle = (Bundle) state;
-
-			setMode(Mode.mapIntToValue(bundle.getInt(STATE_MODE, 0)));
-			mCurrentMode = Mode.mapIntToValue(bundle.getInt(STATE_CURRENT_MODE, 0));
-
-			mScrollingWhileRefreshingEnabled = bundle.getBoolean(STATE_SCROLLING_REFRESHING_ENABLED, false);
-			mShowViewWhileRefreshing = bundle.getBoolean(STATE_SHOW_REFRESHING_VIEW, true);
-
-			// Let super Restore Itself
-			super.onRestoreInstanceState(bundle.getParcelable(STATE_SUPER));
-
-			State viewState = State.mapIntToValue(bundle.getInt(STATE_STATE, 0));
-			if (viewState == State.REFRESHING || viewState == State.MANUAL_REFRESHING) {
-				setState(viewState, true, true);
-			}
-
-			// Now let derivative classes restore their state
-			onPtrRestoreInstanceState(bundle);
-			return;
-		}
-
-		super.onRestoreInstanceState(state);
-	}
-
-	@Override
-	protected final Parcelable onSaveInstanceState() {
-		Bundle bundle = new Bundle();
-
-		// Let derivative classes get a chance to save state first, that way we
-		// can make sure they don't overrite any of our values
-		onPtrSaveInstanceState(bundle);
-
-		bundle.putInt(STATE_STATE, mState.getIntValue());
-		bundle.putInt(STATE_MODE, mMode.getIntValue());
-		bundle.putInt(STATE_CURRENT_MODE, mCurrentMode.getIntValue());
-		bundle.putBoolean(STATE_SCROLLING_REFRESHING_ENABLED, mScrollingWhileRefreshingEnabled);
-		bundle.putBoolean(STATE_SHOW_REFRESHING_VIEW, mShowViewWhileRefreshing);
-		bundle.putParcelable(STATE_SUPER, super.onSaveInstanceState());
-
-		return bundle;
-	}
+    // Don't mess with refreshing stuff on save/restore instance state. It's just messing things up.
+//	@Override
+//	protected final void onRestoreInstanceState(Parcelable state) {
+//		if (state instanceof Bundle) {
+//			Bundle bundle = (Bundle) state;
+//
+//			setMode(Mode.mapIntToValue(bundle.getInt(STATE_MODE, 0)));
+//			mCurrentMode = Mode.mapIntToValue(bundle.getInt(STATE_CURRENT_MODE, 0));
+//
+//			mScrollingWhileRefreshingEnabled = bundle.getBoolean(STATE_SCROLLING_REFRESHING_ENABLED, false);
+//			mShowViewWhileRefreshing = bundle.getBoolean(STATE_SHOW_REFRESHING_VIEW, true);
+//
+//			// Let super Restore Itself
+//			super.onRestoreInstanceState(bundle.getParcelable(STATE_SUPER));
+//
+//			State viewState = State.mapIntToValue(bundle.getInt(STATE_STATE, 0));
+//			if (viewState == State.REFRESHING || viewState == State.MANUAL_REFRESHING) {
+//				setState(viewState, true, true);
+//			}
+//
+//			// Now let derivative classes restore their state
+//			onPtrRestoreInstanceState(bundle);
+//			return;
+//		}
+//
+//		super.onRestoreInstanceState(state);
+//	}
+//
+//	@Override
+//	protected final Parcelable onSaveInstanceState() {
+//		Bundle bundle = new Bundle();
+//
+//		// Let derivative classes get a chance to save state first, that way we
+//		// can make sure they don't overrite any of our values
+//		onPtrSaveInstanceState(bundle);
+//
+//		bundle.putInt(STATE_STATE, mState.getIntValue());
+//		bundle.putInt(STATE_MODE, mMode.getIntValue());
+//		bundle.putInt(STATE_CURRENT_MODE, mCurrentMode.getIntValue());
+//		bundle.putBoolean(STATE_SCROLLING_REFRESHING_ENABLED, mScrollingWhileRefreshingEnabled);
+//		bundle.putBoolean(STATE_SHOW_REFRESHING_VIEW, mShowViewWhileRefreshing);
+//		bundle.putParcelable(STATE_SUPER, super.onSaveInstanceState());
+//
+//		return bundle;
+//	}
 
 	@Override
 	protected final void onSizeChanged(int w, int h, int oldw, int oldh) {
