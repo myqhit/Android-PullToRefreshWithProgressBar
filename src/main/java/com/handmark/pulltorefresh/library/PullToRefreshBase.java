@@ -759,10 +759,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 					default:
 					case PULL_FROM_START:
                         if (smoothScroll) {
-                            Log.v("TAG", "SMOOTH SCROLL!");
                             smoothScrollTo(-getHeaderSize(), listener);
                         } else {
-                            Log.v("TAG", "NON-SMOOTH SCROLL!");
                             setHeaderScroll(-getHeaderSize(), 0);
                             callRefreshListener();
                         }

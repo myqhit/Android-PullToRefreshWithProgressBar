@@ -73,13 +73,11 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		 */
 		ListAdapter adapter = mRefreshableView.getAdapter();
 		if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing() || null == adapter || adapter.isEmpty()) {
-            Log.v("TAG", "EMPTY CASE");
 			super.onRefreshing(doScroll,
                                smoothScroll);
 			return;
 		}
 
-        Log.v("TAG", "NOT EMPTY CASE");
 		super.onRefreshing(false,
                            false);
 
@@ -130,10 +128,8 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
 			// Smooth scroll as normal
             if (smoothScroll) {
-                Log.v("TAG", "lets SMOOTH SCROLL");
                 smoothScrollTo(0);
             } else {
-                Log.v("TAG", "lets NORMAL SCROLL");
                 scrollTo(0, 0);
             }
 		}
