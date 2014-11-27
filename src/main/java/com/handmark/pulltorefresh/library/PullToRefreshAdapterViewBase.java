@@ -32,7 +32,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
 import com.handmark.pulltorefresh.library.internal.EmptyViewMethodAccessor;
 import com.handmark.pulltorefresh.library.internal.IndicatorLayout;
 
