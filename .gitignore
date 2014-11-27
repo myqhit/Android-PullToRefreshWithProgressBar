@@ -30,6 +30,7 @@ Thumbs.db
 .idea/workspace.xml
 .gradle
 build/
+*.iml
 
 # Greg's stuff
 *.swp
