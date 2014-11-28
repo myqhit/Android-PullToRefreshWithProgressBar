@@ -67,20 +67,17 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 	@Override
 	protected void onRefreshing(final boolean doScroll,
                                 final boolean smoothScroll) {
-		ALog.v("");
 		/**
 		 * If we're not showing the Refreshing view, or the list is empty, the
 		 * the header/footer views won't show so we use the normal method.
 		 */
 		ListAdapter adapter = mRefreshableView.getAdapter();
 		if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing() || null == adapter || adapter.isEmpty()) {
-		ALog.v("");
 			super.onRefreshing(doScroll,
                                smoothScroll);
 			return;
 		}
 
-		ALog.v("");
 		super.onRefreshing(false,
                            false);
 
@@ -90,7 +87,6 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		switch (getCurrentMode()) {
 			case MANUAL_REFRESH_ONLY:
 			case PULL_FROM_END:
-		ALog.v("");
 				origLoadingView = getFooterLayout();
 				listViewLoadingView = mFooterLoadingView;
 				oppositeListViewLoadingView = mHeaderLoadingView;
@@ -99,7 +95,6 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 				break;
 			case PULL_FROM_START:
 			default:
-		ALog.v("");
 				origLoadingView = getHeaderLayout();
 				listViewLoadingView = mHeaderLoadingView;
 				oppositeListViewLoadingView = mFooterLoadingView;
@@ -120,7 +115,6 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		listViewLoadingView.refreshing();
 
 		if (doScroll) {
-		ALog.v("");
 			// We need to disable the automatic visibility changes for now
 			disableLoadingLayoutVisibilityChanges();
 
@@ -134,10 +128,8 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
 			// Smooth scroll as normal
             if (smoothScroll) {
-		ALog.v("");
                 smoothScrollTo(0);
             } else {
-		ALog.v("");
                 scrollTo(0, 0);
             }
 		}
@@ -361,11 +353,9 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 	private void setDataSetObservor(ListAdapter adapter) {
 		if (DEBUG) Log.v(LOG_TAG, "setDataSetObservor");
 		if (myDataSetObservor == null) {
-			ALog.v("");
 			myDataSetObservor = new MyDataSetObserver(adapter);
 			adapter.registerDataSetObserver(myDataSetObservor);
 		} else {
-			ALog.v("");
             myDataSetObservor.getAdapter().unregisterDataSetObserver(myDataSetObservor);
 			myDataSetObservor.setAdapter(adapter);
 			adapter.registerDataSetObserver(myDataSetObservor);
@@ -402,7 +392,6 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		}
 		
 		private void checkEmptyChangeAndToggleIfNecessary() {
-			ALog.v("");
             // This is a hack to make sure that if the progress bar happens to be animating
             // (in the middle of a smoothScrollTo) when data set goes from empty to non-empty,
             // we don't show the non-empty progress bar and attempt to scroll us where we should
@@ -429,20 +418,20 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
                             boolean isEmptyHeaderVisible = (getHeaderLayout().getVisibility() == View.VISIBLE);
                             boolean isNonEmptyHeaderVisible = (mHeaderLoadingView.getVisibility() == View.VISIBLE);
                             boolean isAdapterEmpty = adapter.isEmpty();
-        
-                            ALog.v("isEmptyHeaderVisible = " + isEmptyHeaderVisible + ", isNonEmptyHeaderVisible = " + isNonEmptyHeaderVisible + ", isAdapterEmpty = " + isAdapterEmpty);
+
+                            if (DEBUG) Log.v(LOG_TAG, "isEmptyHeaderVisible = " + isEmptyHeaderVisible + ", isNonEmptyHeaderVisible = " + isNonEmptyHeaderVisible + ", isAdapterEmpty = " + isAdapterEmpty);
                             if (isEmptyHeaderVisible &&
                                 !isNonEmptyHeaderVisible &&
                                 !isAdapterEmpty) {
-                                ALog.v("toggle it from empty to non-empty!");
+                                if (DEBUG) Log.v(LOG_TAG, "toggle it from empty to non-empty!");
                                 toggleLoadingLayoutsForEmptyChange(isAdapterEmpty);
                             } else if (isNonEmptyHeaderVisible &&
                                        !isEmptyHeaderVisible &&
                                        isAdapterEmpty) {
-                                ALog.v("toggle it from non-empty to empty!");
+                                if (DEBUG) Log.v(LOG_TAG, "toggle it from non-empty to empty!");
                                 toggleLoadingLayoutsForEmptyChange(isAdapterEmpty);
                             } else {
-                                ALog.v("no toggling to do!");
+                                if (DEBUG) Log.v(LOG_TAG, "no toggling to do!");
                             }
                             
                             break;
