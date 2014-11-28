@@ -361,41 +361,54 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 	private void setDataSetObservor(ListAdapter adapter) {
 		if (DEBUG) Log.v(LOG_TAG, "setDataSetObservor");
 		if (myDataSetObservor == null) {
-			myDataSetObservor = new MyDataSetObserver();
-		}
-
-		
-		if (!adapter.equals(myDataSetObservor.getAdapter())) {
-			if (DEBUG) Log.v(LOG_TAG, "WHAT");
-			if (myDataSetObservor.getAdapter() != null) {
-				myDataSetObservor.getAdapter().unregisterDataSetObserver(myDataSetObservor);
-			}
+			ALog.v("");
+			myDataSetObservor = new MyDataSetObserver(adapter);
 			adapter.registerDataSetObserver(myDataSetObservor);
+		} else {
+			ALog.v("");
+            myDataSetObservor.getAdapter().unregisterDataSetObserver(myDataSetObservor);
 			myDataSetObservor.setAdapter(adapter);
+			adapter.registerDataSetObserver(myDataSetObservor);
 		}
 	}
 	
+	// myDataSetObservor is a member variable for the ListView. Inside, we keep track of wasEmpty,
+	// across any arbitrary change in adapters or data sets. We simple want to know if
+	// it was empty before or not so I can perform the necessary toggling of our real/fake
+	// headers if the empty or not status changes. This presumably could only even change
+	// if you call notifyDataSetChanged (calling onChanged in my DataSetObserver), or by
+	// calling setAdapter.
 	private MyDataSetObserver myDataSetObservor = null;
 	private class MyDataSetObserver extends DataSetObserver {
 		
 		private boolean wasEmpty = true;
 		private ListAdapter adapter = null;
+		
+		public MyDataSetObserver(ListAdapter adapter) {
+			this.adapter = adapter;
+			this.wasEmpty = this.adapter.isEmpty();
+			ALog.v("wasEmpty = " + wasEmpty + ", but adapter.isEmpty is " + adapter.isEmpty());
+		}
 	
 		public ListAdapter getAdapter() {
 			return adapter;
 		}
 
 		public void setAdapter(ListAdapter adapter) {
-			ALog.v("wasEmpty = " + wasEmpty + ", but adapter.isEmpty is " + adapter.isEmpty());
 			this.adapter = adapter;
-			this.wasEmpty = this.adapter.isEmpty();
+			checkEmptyChangeAndToggleIfNecessary();
 		}
 
-		
 		@Override
 		public void onChanged() {
 			if (DEBUG) Log.v(LOG_TAG, "onChanged wasEmpty = " + wasEmpty + ", adapter.isEmpty() = " + adapter.isEmpty());
-			if (adapter.isEmpty() != wasEmpty) {
+			checkEmptyChangeAndToggleIfNecessary();
+		}
+		
+		private void checkEmptyChangeAndToggleIfNecessary() {
+			ALog.v("");
+            if (adapter.isEmpty() != wasEmpty) {
+                ALog.v("EMPTY CHANGE!");
                 // This is a hack to make sure that if the progress bar happens to be animating
                 // (in the middle of a smoothScrollTo) when data set goes from empty to non-empty,
                 // we don't show the non-empty progress bar and attempt to scroll us where we should
