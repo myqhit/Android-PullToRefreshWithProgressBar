@@ -381,13 +381,10 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 	private MyDataSetObserver myDataSetObservor = null;
 	private class MyDataSetObserver extends DataSetObserver {
 		
-		private boolean wasEmpty = true;
 		private ListAdapter adapter = null;
 		
 		public MyDataSetObserver(ListAdapter adapter) {
 			this.adapter = adapter;
-			this.wasEmpty = this.adapter.isEmpty();
-			ALog.v("wasEmpty = " + wasEmpty + ", but adapter.isEmpty is " + adapter.isEmpty());
 		}
 	
 		public ListAdapter getAdapter() {
@@ -401,43 +398,58 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
 		@Override
 		public void onChanged() {
-			if (DEBUG) Log.v(LOG_TAG, "onChanged wasEmpty = " + wasEmpty + ", adapter.isEmpty() = " + adapter.isEmpty());
 			checkEmptyChangeAndToggleIfNecessary();
 		}
 		
 		private void checkEmptyChangeAndToggleIfNecessary() {
 			ALog.v("");
-            if (adapter.isEmpty() != wasEmpty) {
-                ALog.v("EMPTY CHANGE!");
-                // This is a hack to make sure that if the progress bar happens to be animating
-                // (in the middle of a smoothScrollTo) when data set goes from empty to non-empty,
-                // we don't show the non-empty progress bar and attempt to scroll us where we should
-                // be, only to be overridden by the smoothScrollTo currently running. That would
-                // lead to a white space above the non-empty ListView progress bar because it was
-                // scrolling us to show that the empty ListView progress bar but we hid it, and
-                // tried to scroll it where it should be, but like I said since it was in the middle
-                // of smoothScrollTo it got overridden. The reason I'm doing a hack is to CORRECTLY
-                // fix this would be too much work... you would have to order ALL operations, so
-                // like a Handler or something. His code is not thread-safe, and issues like this
-                // are probably still in the code somewhere which is perhaps one reason he abanonded
-                // this project.
-                postDelayed(new Runnable() {
-                    public void run() {
-                        switch (mState) {
-                            case RESET:
-                                if (DEBUG) Log.v(LOG_TAG, "RESET");
-                                onReset();
-                                break;
-                            case REFRESHING:
-                            case MANUAL_REFRESHING:
-                                if (DEBUG) Log.v(LOG_TAG, "REFRESHING");
-                                toggleLoadingLayoutsForEmptyChange(adapter.isEmpty());
-                                break;
-                        }
+            // This is a hack to make sure that if the progress bar happens to be animating
+            // (in the middle of a smoothScrollTo) when data set goes from empty to non-empty,
+            // we don't show the non-empty progress bar and attempt to scroll us where we should
+            // be, only to be overridden by the smoothScrollTo currently running. That would
+            // lead to a white space above the non-empty ListView progress bar because it was
+            // scrolling us to show that the empty ListView progress bar but we hid it, and
+            // tried to scroll it where it should be, but like I said since it was in the middle
+            // of smoothScrollTo it got overridden. The reason I'm doing a hack is to CORRECTLY
+            // fix this would be too much work... you would have to order ALL operations, so
+            // like a Handler or something. His code is not thread-safe, and issues like this
+            // are probably still in the code somewhere which is perhaps one reason he abanonded
+            // this project.
+            postDelayed(new Runnable() {
+                public void run() {
+                    switch (mState) {
+                        case RESET:
+                            if (DEBUG) Log.v(LOG_TAG, "RESET");
+                            onReset();
+                            break;
+                        case REFRESHING:
+                        case MANUAL_REFRESHING:
+                            if (DEBUG) Log.v(LOG_TAG, "REFRESHING");
+                            
+                            boolean isEmptyHeaderVisible = (getHeaderLayout().getVisibility() == View.VISIBLE);
+                            boolean isNonEmptyHeaderVisible = (mHeaderLoadingView.getVisibility() == View.VISIBLE);
+                            boolean isAdapterEmpty = adapter.isEmpty();
+        
+                            ALog.v("isEmptyHeaderVisible = " + isEmptyHeaderVisible + ", isNonEmptyHeaderVisible = " + isNonEmptyHeaderVisible + ", isAdapterEmpty = " + isAdapterEmpty);
+                            if (isEmptyHeaderVisible &&
+                                !isNonEmptyHeaderVisible &&
+                                !isAdapterEmpty) {
+                                ALog.v("toggle it from empty to non-empty!");
+                                toggleLoadingLayoutsForEmptyChange(isAdapterEmpty);
+                            } else if (isNonEmptyHeaderVisible &&
+                                       !isEmptyHeaderVisible &&
+                                       isAdapterEmpty) {
+                                ALog.v("toggle it from non-empty to empty!");
+                                toggleLoadingLayoutsForEmptyChange(isAdapterEmpty);
+                            } else {
+                                ALog.v("no toggling to do!");
+                            }
+                            
+                            break;
+
                     }
-                }, 500);
-				wasEmpty = adapter.isEmpty();
-			}
+                }
+            }, 500);
 		}
 		
 		private void toggleLoadingLayoutsForEmptyChange(boolean isEmpty) {
