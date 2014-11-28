@@ -386,7 +386,9 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		}
 
 		public void setAdapter(ListAdapter adapter) {
+			ALog.v("wasEmpty = " + wasEmpty + ", but adapter.isEmpty is " + adapter.isEmpty());
 			this.adapter = adapter;
+			this.wasEmpty = this.adapter.isEmpty();
 		}
 
 		
