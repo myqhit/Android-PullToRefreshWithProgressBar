@@ -735,6 +735,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 			mFooterLayout.refreshing();
 		}
 
+		ALog.v("");
 		if (doScroll) {
 			if (mShowViewWhileRefreshing) {
 
@@ -750,8 +751,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 					case MANUAL_REFRESH_ONLY:
 					case PULL_FROM_END:
                         if (smoothScroll) {
+		ALog.v("");
                             smoothScrollTo(getFooterSize(), listener);
                         } else {
+		ALog.v("");
                             setHeaderScroll(getFooterSize(), 0);
                             callRefreshListener();
                         }
@@ -759,8 +762,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 					default:
 					case PULL_FROM_START:
                         if (smoothScroll) {
+		ALog.v("");
                             smoothScrollTo(-getHeaderSize(), listener);
                         } else {
+		ALog.v("");
                             setHeaderScroll(-getHeaderSize(), 0);
                             callRefreshListener();
                         }
@@ -768,8 +773,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 				}
 			} else {
                 if (smoothScroll) {
+		ALog.v("");
                     smoothScrollTo(0);
                 } else {
+		ALog.v("");
                     setHeaderScroll(0, 0);
                 }
             }
